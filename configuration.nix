@@ -10,9 +10,33 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
+  # ===== Bootloader : GRUB =====
+  # Menu : NixOS / NixOS - All configurations / Windows 11
+  boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    device = "nodev"; # UEFI : pas d'install sur un disque entier
+    configurationLimit = 10;
+    useOSProber = false; # entrée Windows écrite à la main ci-dessous
+    extraEntries = ''
+      menuentry "Windows 11" {
+        insmod part_gpt
+        insmod fat
+        search --no-floppy --fs-uuid --set=root 05E7-09E2
+        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      }
+    '';
+  };
+
+  # ===== Nettoyage automatique des générations =====
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.settings.auto-optimise-store = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -97,7 +121,8 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    git # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    gh
+    git
     pciutils
     wget
   ];
@@ -143,7 +168,9 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-    # ===== GPU : Intel + NVIDIA (PRIME offload) =====
+  system.stateVersion = "26.05"; # Did you read the comment?
+
+  # ===== GPU : Intel + NVIDIA (PRIME offload) =====
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # pour Steam et les jeux 32 bits
@@ -168,8 +195,5 @@
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
-  };  
-  
-  system.stateVersion = "26.05"; # Did you read the comment?
-
+  };
 }
