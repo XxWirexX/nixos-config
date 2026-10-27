@@ -17,6 +17,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Ton fork d'Impasto, pour ses fichiers SYSTÈME (écran de connexion, avatar).
+    # Le reste (shell, config Hyprland) est lu directement dans ~/impasto.
+    # Après une modif de system/ dans le fork : nix flake update impasto
+    impasto = {
+      url = "github:XxWirexX/impasto";
+      flake = false;
+    };
+
     # home-manager : gère ton home (dotfiles, programmes utilisateur)
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";

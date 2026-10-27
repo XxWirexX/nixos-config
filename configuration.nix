@@ -167,7 +167,7 @@ in
   users.users."wire" = {
     isNormalUser = true;
     description = "Wire";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "i2c" ]; # i2c : luminosité des écrans externes
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird

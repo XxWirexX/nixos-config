@@ -17,6 +17,8 @@ let
     (hyprPkgs.callPackage ./pkgs/hyprglass.nix { inherit mkHyprlandPlugin; })
   ];
 
+  impastoSystem = pkgs.callPackage ./pkgs/impasto-system.nix { src = inputs.impasto; };
+
   python = pkgs.python3.withPackages (ps: [
     ps.numpy
     ps.opencv4
@@ -89,7 +91,30 @@ in
     kdePackages.kwallet-pam        # pam_kwallet_init, lancé par l'autostart Hyprland
   ]
   # Plugins -> /run/current-system/sw/lib/lib*.so, chargés par modules/plugins.lua du fork
-  ++ hyprPlugins;
+  ++ hyprPlugins
+  # Thème SDDM, script d'avatar et sa règle polkit
+  ++ [ impastoSystem ];
+
+  # ── Écran de connexion (SDDM) ────────────────────────────────────────────
+  # Sur Arch : /etc/sddm.conf.d/10-impasto.conf, écrit par ./setup system
+  services.displayManager.sddm = {
+    theme = "impasto";
+    settings = {
+      # Le thème lit la batterie dans /sys (pas d'UPower au login) : Qt 6
+      # l'interdit sans cette variable. On garde celle du greeter Wayland.
+      General.GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell,QML_XHR_ALLOW_FILE_READ=1";
+      # Photos de compte, partagées avec l'écran de verrouillage d'Impasto
+      Theme.FacesDir = "/var/lib/impasto/faces";
+    };
+  };
+  systemd.tmpfiles.rules = [ "d /var/lib/impasto/faces 0755 root root -" ];
+
+  # Bouton power : ouvre le menu de session d'Impasto au lieu d'éteindre
+  # (un appui long éteint toujours, géré par le firmware)
+  services.logind.settings.Login.HandlePowerKey = "ignore";
+
+  # Luminosité des écrans externes (ddcutil, via DDC/CI)
+  hardware.i2c.enable = true;
 
   fonts.packages = with pkgs; [
     inter                       # police du shell
