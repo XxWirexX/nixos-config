@@ -7,6 +7,15 @@
 let
   system = pkgs.stdenv.hostPlatform.system;
   quickshell = inputs.quickshell.packages.${system}.default;
+
+  # Python des scripts du shell. Les modules en plus servent aux effets caméra
+  # (camera.py) ; les autres scripts n'utilisent que la bibliothèque standard.
+  python = pkgs.python3.withPackages (ps: [
+    ps.numpy
+    ps.opencv4
+    ps.pillow
+    (ps.callPackage ./pkgs/mediapipe.nix { })
+  ]);
 in
 {
   environment.systemPackages = with pkgs; [
@@ -14,8 +23,9 @@ in
     quickshell            # le shell : barre, island, lock, notifications (qs)
     awww                  # fond d'écran
     imagemagick           # palette tirée du fond d'écran
-    python3               # tous les scripts du shell (stdlib uniquement)
+    python                # scripts du shell (+ numpy, opencv, mediapipe pour la caméra)
     git
+    curl                  # ./setup camera télécharge les modèles avec
     grim                  # captures, et la photo de l'écran de verrouillage
     wl-clipboard          # copier/coller + historique
     gtk3                  # gtk-launch : le launcher lance les applis avec
@@ -53,6 +63,7 @@ in
     wf-recorder
     wl-screenrec          # enregistrement via le GPU, essayé en premier
     pulseaudio            # pactl (trouve la sortie audio à enregistrer)
+    v4l-utils             # v4l2-ctl : trouve la webcam (effets caméra)
 
     # ── Programmes terminal ────────────────────────────────────────────────
     fzf zoxide fastfetch btop cava yazi imv mpv ffmpeg
@@ -83,6 +94,16 @@ in
     "/share/X11"        # règles xkb (liste des dispositions clavier)
     "/share/icons"
   ];
+
+  # ── Effets caméra (Super+Maj+W) ──────────────────────────────────────────
+  # Caméra virtuelle "impasto camera", que camera.py alimente avec la webcam
+  # filtrée, et que les applis d'appel voient comme une webcam.
+  # (Sur Arch : /etc/modprobe.d et /etc/modules-load.d écrits par ./setup camera)
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback video_nr=10 card_label="impasto camera" exclusive_caps=1
+  '';
 
   # Services que les tuiles du centre de contrôle utilisent
   services.upower.enable = true;            # batterie
