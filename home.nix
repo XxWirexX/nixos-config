@@ -16,6 +16,7 @@
     fastfetch
     btop
     tree
+    claude-code   # commande "claude" ; remplit aussi le widget d'usage d'Impasto
   ];
 
   # Git géré par home-manager (génère ~/.config/git/config)
