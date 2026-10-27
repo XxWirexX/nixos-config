@@ -24,6 +24,10 @@
     portalPackage = null;
     systemd.enable = false; # désactivé : c'est UWSM (côté système) qui gère la session
 
+    # Config au format hyprlang (hyprland.conf). Lua est le nouveau format par défaut,
+    # hyprlang reste supporté (déprécié) : à migrer en Lua lors de la perso des dotfiles
+    configType = "hyprlang";
+
     settings = {
       "$mod" = "SUPER";
       "$terminal" = "kitty";
