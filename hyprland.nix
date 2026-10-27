@@ -16,6 +16,15 @@
     playerctl      # contrôle média
   ];
 
+  # Montage automatique des clés USB / disques externes (Plasma le fait tout seul,
+  # pas Hyprland). Icône dans la barre + notification à l'insertion.
+  services.udiskie = {
+    enable = true;
+    automount = true;
+    notify = true;
+    tray = "auto";
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
     # Hyprland est installé côté système (programs.hyprland dans configuration.nix),

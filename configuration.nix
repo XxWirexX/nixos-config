@@ -84,6 +84,7 @@
   };
   services.displayManager.sddm.wayland.enable = true;
   security.pam.services.hyprlock = { }; # pour que hyprlock accepte ton mot de passe
+  services.udisks2.enable = true; # nécessaire pour udiskie (déjà activé par Plasma, mais explicite)
 
   # Configure keymap in X11
   services.xserver.xkb = {
