@@ -23,7 +23,9 @@ let
           };
         });
       })
-      inputs.hyprland.overlays.default
+      # Même assemblage que le flake Hyprland (pkgsFor) : dépendances + Hyprland + portail
+      inputs.hyprland.overlays.hyprland-packages
+      inputs.hyprland.overlays.hyprland-extras
     ];
   };
 in
