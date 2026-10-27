@@ -25,6 +25,13 @@
       flake = false;
     };
 
+    # Zen Browser (pas dans nixpkgs) ; Impasto lui applique ta palette
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     # home-manager : gère ton home (dotfiles, programmes utilisateur)
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";

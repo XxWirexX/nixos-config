@@ -40,6 +40,7 @@ let
     ".config/yazi"
     ".config/fastfetch"
     ".config/starship.toml"
+    ".config/nvim"                # copié : lazy.nvim y écrit son lazy-lock.json
     ".local/share/impasto"      # profils, planche de palettes
     ".local/share/wallpapers"   # les peintures
     ".local/share/fonts"

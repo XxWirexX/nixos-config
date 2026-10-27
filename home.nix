@@ -17,6 +17,7 @@
     btop
     tree
     claude-code   # commande "claude" ; remplit aussi le widget d'usage d'Impasto
+    codex         # Codex (OpenAI) ; son widget d'usage aussi
   ];
 
   # Git géré par home-manager (génère ~/.config/git/config)

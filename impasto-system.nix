@@ -87,6 +87,22 @@ in
     spice-gtk             # spicy : affiche la VM dans une fenêtre
     qemu                  # qemu-img (taille des disques)
 
+    # ── Fonds d'écran animés ───────────────────────────────────────────────
+    mpvpaper              # joue une vidéo en fond d'écran
+
+    # ── Applis aux couleurs de la palette ──────────────────────────────────
+    # (premier thème : ./setup vscodium, ./setup vesktop, ./setup spotify)
+    vscodium
+    vesktop               # Discord
+    spicetify-cli         # thème Spotify ; Spotify lui-même en Flatpak (voir plus bas)
+    inputs.zen-browser.packages.${system}.default
+
+    # ── Neovim d'Impasto (~/.config/nvim) et ce que sa config utilise ──────
+    neovim
+    tree-sitter gcc       # compile les parsers de coloration
+    ripgrep fd            # recherche de texte et de fichiers
+    lua-language-server basedpyright ruff bash-language-server
+
     # ── Agents ─────────────────────────────────────────────────────────────
     kdePackages.polkit-kde-agent-1 # secours si le shell ne peut pas être l'agent polkit
     kdePackages.kwallet-pam        # pam_kwallet_init, lancé par l'autostart Hyprland
@@ -113,6 +129,29 @@ in
   # Bouton power : ouvre le menu de session d'Impasto au lieu d'éteindre
   # (un appui long éteint toujours, géré par le firmware)
   services.logind.settings.Login.HandlePowerKey = "ignore";
+
+  # ── Spotify en Flatpak ──────────────────────────────────────────────────
+  # spicetify doit modifier les fichiers de Spotify pour appliquer la palette :
+  # impossible dans /nix/store (lecture seule), possible dans un Flatpak
+  # installé pour l'utilisateur. Une fois :
+  #   flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  #   flatpak install --user flathub com.spotify.Client
+  services.flatpak.enable = true;
+
+  # ── Écran de démarrage (Plymouth) ────────────────────────────────────────
+  # Sur Arch : ./setup splash (mkinitcpio + argument "splash")
+  boot.plymouth = {
+    enable = true;
+    theme = "impasto";
+    themePackages = [ impastoSystem ];
+  };
+  # Démarrage silencieux : l'animation au lieu des lignes de texte
+  boot.consoleLogLevel = 3;
+  boot.initrd.verbose = false;
+  boot.kernelParams = [ "quiet" "splash" "udev.log_level=3" "rd.udev.log_level=3" ];
+  # Le pilote de l'écran du portable (iGPU Intel) dès le début du boot,
+  # pour que l'animation s'affiche tout de suite et en pleine résolution
+  boot.initrd.kernelModules = [ "i915" ];
 
   # ── zsh, le shell d'Impasto ──────────────────────────────────────────────
   # Le .zshrc (oh-my-zsh, starship, fzf, zoxide…) vient du fork, via impasto.nix

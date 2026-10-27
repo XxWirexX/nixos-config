@@ -1,5 +1,6 @@
 # Les fichiers SYSTÈME du fork Impasto (dossier system/ du repo), empaquetés :
 #  - le thème SDDM "impasto" (l'écran de connexion)
+#  - le thème Plymouth "impasto" (l'écran de démarrage)
 #  - le script d'avatar et sa règle polkit (photo de compte, partagée entre
 #    l'écran de connexion et l'écran de verrouillage)
 # Sur Arch, ./setup system les copie dans /usr ; ici ils viennent de l'entrée
@@ -19,6 +20,12 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/share/sddm/themes
     cp -r system/usr/share/sddm/themes/impasto $out/share/sddm/themes/
+
+    # Écran de démarrage (Plymouth) : ses images sont lues dans ImageDir
+    mkdir -p $out/share/plymouth/themes
+    cp -r system/usr/share/plymouth/themes/impasto $out/share/plymouth/themes/
+    substituteInPlace $out/share/plymouth/themes/impasto/impasto.plymouth \
+      --replace-fail /usr/share/plymouth $out/share/plymouth
 
     # Lancé en root par pkexec, dont le PATH ne contient rien d'utile sur NixOS
     install -Dm755 system/usr/lib/impasto/avatar $out/libexec/impasto/avatar
