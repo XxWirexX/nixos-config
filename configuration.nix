@@ -34,6 +34,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./impasto-system.nix
     ];
 
   # ===== Bootloader : GRUB =====

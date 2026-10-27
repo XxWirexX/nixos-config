@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./hyprland.nix
+    ./impasto.nix
   ];
 
   home.username = "wire";

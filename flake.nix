@@ -10,6 +10,13 @@
     # Pas de "follows" sur nixpkgs : sinon le cache binaire ne sert plus et tout se recompile.
     hyprland.url = "github:hyprwm/Hyprland/v0.56.2";
 
+    # Quickshell (le moteur du shell d'Impasto), en 0.3.2 : nixpkgs 26.05 n'a que la 0.3.0.
+    # Construit contre notre nixpkgs pour partager le même Qt que le reste du système.
+    quickshell = {
+      url = "github:quickshell-mirror/quickshell/v0.3.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # home-manager : gère ton home (dotfiles, programmes utilisateur)
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
