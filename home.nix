@@ -25,6 +25,13 @@
     };
   };
 
+  # GitHub CLI + utilisation de gh comme gestionnaire d'identifiants pour Git
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper.enable = true;
+    settings.git_protocol = "https";
+  };
+
   # Bash avec quelques raccourcis
   programs.bash = {
     enable = true;
