@@ -72,6 +72,11 @@ in
     nautilus              # Super+E
     ffmpegthumbnailer
 
+    # ── Machines virtuelles (Super+Maj+M) ──────────────────────────────────
+    quickemu              # quickemu + quickget (télécharge les ISO)
+    spice-gtk             # spicy : affiche la VM dans une fenêtre
+    qemu                  # qemu-img (taille des disques)
+
     # ── Agents ─────────────────────────────────────────────────────────────
     kdePackages.polkit-kde-agent-1 # secours si le shell ne peut pas être l'agent polkit
     kdePackages.kwallet-pam        # pam_kwallet_init, lancé par l'autostart Hyprland
