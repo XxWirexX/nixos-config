@@ -86,6 +86,20 @@
   security.pam.services.hyprlock = { }; # pour que hyprlock accepte ton mot de passe
   services.udisks2.enable = true; # nécessaire pour udiskie (déjà activé par Plasma, mais explicite)
 
+  # ===== Trousseau (KWallet) =====
+  # Déverrouillé automatiquement à la connexion via SDDM, pour Plasma ET Hyprland
+  security.pam.services.sddm.kwallet = {
+    enable = true;
+    package = pkgs.kdePackages.kwallet-pam;
+  };
+
+  # ===== Agent SSH =====
+  # Retient la passphrase de ta clé après la première utilisation
+  programs.ssh.startAgent = true;
+  programs.ssh.extraConfig = ''
+    AddKeysToAgent yes
+  '';
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "fr";

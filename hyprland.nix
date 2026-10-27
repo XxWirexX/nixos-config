@@ -46,6 +46,9 @@
       monitor = [ ",preferred,auto,1" ];
 
       exec-once = [
+        # Démarre KWallet et le déverrouille avec le mot de passe de connexion
+        # (comme sous Plasma) : gh, navigateurs, VS Code… retrouvent leurs identifiants
+        "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
         "waybar"
         "mako"
       ];
