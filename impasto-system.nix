@@ -2,7 +2,7 @@
 # Traduction en Nix de packages/pacman.txt et aur.txt du fork XxWirexX/impasto.
 # Les paquets sont installés côté système : le fork cherche ses données dans
 # /run/current-system/sw (icônes, emoji, xkb, agents…).
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, hyprPkgs, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -10,6 +10,13 @@ let
 
   # Python des scripts du shell. Les modules en plus servent aux effets caméra
   # (camera.py) ; les autres scripts n'utilisent que la bibliothèque standard.
+  # Plugins Hyprland, construits contre CE Hyprland (0.56.2) et son compilateur :
+  # un plugin compilé pour une autre version est refusé au chargement.
+  hyprPlugins = with hyprPkgs.hyprlandPlugins; [
+    (hyprPkgs.callPackage ./pkgs/hypr-dynamic-cursors.nix { inherit mkHyprlandPlugin; })
+    (hyprPkgs.callPackage ./pkgs/hyprglass.nix { inherit mkHyprlandPlugin; })
+  ];
+
   python = pkgs.python3.withPackages (ps: [
     ps.numpy
     ps.opencv4
@@ -80,7 +87,9 @@ in
     # ── Agents ─────────────────────────────────────────────────────────────
     kdePackages.polkit-kde-agent-1 # secours si le shell ne peut pas être l'agent polkit
     kdePackages.kwallet-pam        # pam_kwallet_init, lancé par l'autostart Hyprland
-  ];
+  ]
+  # Plugins -> /run/current-system/sw/lib/lib*.so, chargés par modules/plugins.lua du fork
+  ++ hyprPlugins;
 
   fonts.packages = with pkgs; [
     inter                       # police du shell

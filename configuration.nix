@@ -109,6 +109,9 @@ in
   services.desktopManager.plasma6.enable = true;
 
   # Hyprland, en plus de Plasma (session à choisir dans SDDM)
+  # Rend hyprPkgs disponible aux autres modules (impasto-system.nix : plugins)
+  _module.args.hyprPkgs = hyprPkgs;
+
   programs.hyprland = {
     enable = true;
     withUWSM = true; # lancement propre via systemd
