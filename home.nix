@@ -36,15 +36,13 @@
     settings.git_protocol = "ssh";
   };
 
-  # Bash avec quelques raccourcis
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config#nixos";
-      update = "nix flake update --flake ~/nixos-config";
-      nconf = "cd ~/nixos-config";
-    };
+  # Alias partagés : bash (ici) et zsh (~/.zshrc.local, écrit par impasto.nix)
+  home.shellAliases = {
+    rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config#nixos";
+    update = "nix flake update --flake ~/nixos-config";
+    nconf = "cd ~/nixos-config";
   };
+  programs.bash.enable = true;
 
   # Laisse home-manager se gérer lui-même
   programs.home-manager.enable = true;

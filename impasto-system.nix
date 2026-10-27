@@ -75,7 +75,8 @@ in
     v4l-utils             # v4l2-ctl : trouve la webcam (effets caméra)
 
     # ── Programmes terminal ────────────────────────────────────────────────
-    fzf zoxide fastfetch btop cava yazi imv mpv ffmpeg
+    fzf zoxide fnm fastfetch btop cava yazi imv mpv ffmpeg
+    unimatrix cbonsai tty-clock lavat   # alias matrix, bonsai, clock, lava du .zshrc
 
     # ── Fichiers ───────────────────────────────────────────────────────────
     nautilus              # Super+E
@@ -112,6 +113,14 @@ in
   # Bouton power : ouvre le menu de session d'Impasto au lieu d'éteindre
   # (un appui long éteint toujours, géré par le firmware)
   services.logind.settings.Login.HandlePowerKey = "ignore";
+
+  # ── zsh, le shell d'Impasto ──────────────────────────────────────────────
+  # Le .zshrc (oh-my-zsh, starship, fzf, zoxide…) vient du fork, via impasto.nix
+  programs.zsh = {
+    enable = true;
+    enableGlobalCompInit = false; # oh-my-zsh le fait déjà, une fois suffit
+  };
+  users.users.wire.shell = pkgs.zsh;
 
   # Luminosité des écrans externes (ddcutil, via DDC/CI)
   hardware.i2c.enable = true;
