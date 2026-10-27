@@ -77,6 +77,14 @@
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
+  # Hyprland, en plus de Plasma (session à choisir dans SDDM)
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true; # lancement propre via systemd
+  };
+  services.displayManager.sddm.wayland.enable = true;
+  security.pam.services.hyprlock = { }; # pour que hyprlock accepte ton mot de passe
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "fr";
