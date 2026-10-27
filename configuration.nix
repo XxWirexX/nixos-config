@@ -5,9 +5,27 @@
 { config, pkgs, inputs, ... }:
 
 let
-  # Paquets du flake Hyprland, et le nixpkgs avec lequel il est construit
-  hyprPkgs = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
-  hyprNixpkgs = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  # Paquets Hyprland : le nixpkgs du flake Hyprland + ses overlays.
+  # Correctif : Hyprland 0.56.2 exige glaze 7.x (find_package(glaze 7...<8)), mais son
+  # nixpkgs a glaze 8.0.0 -> le build plante. On remet glaze 7.7.1 (header-only, sans risque).
+  # À retirer quand on passera à une version de Hyprland qui accepte glaze 8.
+  hyprPkgs = import inputs.hyprland.inputs.nixpkgs {
+    system = pkgs.stdenv.hostPlatform.system;
+    overlays = [
+      (final: prev: {
+        glaze = prev.glaze.overrideAttrs (old: {
+          version = "7.7.1";
+          src = prev.fetchFromGitHub {
+            owner = "stephenberry";
+            repo = "glaze";
+            tag = "v7.7.1";
+            hash = "sha256-CfN2mv1s+yv2HvRLBZhHUHBNfsgRzTT7USNYkkahh8M=";
+          };
+        });
+      })
+      inputs.hyprland.overlays.default
+    ];
+  };
 in
 
 {
@@ -214,8 +232,8 @@ in
     enable32Bit = true; # pour Steam et les jeux 32 bits
     # Mesa aligné sur celui de Hyprland (il est construit sur nixpkgs-unstable) :
     # sans ça, Hyprland peut refuser de démarrer sur l'iGPU Intel (versions incompatibles)
-    package = hyprNixpkgs.mesa;
-    package32 = hyprNixpkgs.pkgsi686Linux.mesa;
+    package = hyprPkgs.mesa;
+    package32 = hyprPkgs.pkgsi686Linux.mesa;
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
