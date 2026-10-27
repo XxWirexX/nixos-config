@@ -390,6 +390,22 @@
         "type": "github"
       }
     },
+    "impasto": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793134111,
+        "narHash": "sha256-3AzEVa9Mu3Hd/eUah2R65BgDS+PXSNe7QqXTJzddyEs=",
+        "owner": "XxWirexX",
+        "repo": "impasto",
+        "rev": "9923d5abfac2b2f32f2dce8e85c4a78068374871",
+        "type": "github"
+      },
+      "original": {
+        "owner": "XxWirexX",
+        "repo": "impasto",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1785828668,
@@ -469,6 +485,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "hyprland": "hyprland",
+        "impasto": "impasto",
         "nixpkgs": "nixpkgs_2",
         "quickshell": "quickshell"
       }
