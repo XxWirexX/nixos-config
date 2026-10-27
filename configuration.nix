@@ -2,7 +2,13 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
+
+let
+  # Paquets du flake Hyprland, et le nixpkgs avec lequel il est construit
+  hyprPkgs = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprNixpkgs = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 
 {
   imports =
@@ -40,6 +46,10 @@
 
   # ===== Flakes =====
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Cache binaire de Hyprland : télécharge Hyprland déjà compilé au lieu de le builder
+  nix.settings.substituters = [ "https://hyprland.cachix.org" ];
+  nix.settings.trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -81,6 +91,8 @@
   programs.hyprland = {
     enable = true;
     withUWSM = true; # lancement propre via systemd
+    package = hyprPkgs.hyprland;
+    portalPackage = hyprPkgs.xdg-desktop-portal-hyprland;
   };
   services.displayManager.sddm.wayland.enable = true;
   security.pam.services.hyprlock = { }; # pour que hyprlock accepte ton mot de passe
@@ -200,6 +212,10 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # pour Steam et les jeux 32 bits
+    # Mesa aligné sur celui de Hyprland (il est construit sur nixpkgs-unstable) :
+    # sans ça, Hyprland peut refuser de démarrer sur l'iGPU Intel (versions incompatibles)
+    package = hyprNixpkgs.mesa;
+    package32 = hyprNixpkgs.pkgsi686Linux.mesa;
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];

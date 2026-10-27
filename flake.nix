@@ -5,6 +5,11 @@
     # Version de nixpkgs utilisée pour tout le système (même branche que l'install)
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
+    # Hyprland depuis son flake officiel, épinglé sur une release
+    # (nixpkgs 26.05 n'a que la 0.55 ; Impasto demande la 0.56+).
+    # Pas de "follows" sur nixpkgs : sinon le cache binaire ne sert plus et tout se recompile.
+    hyprland.url = "github:hyprwm/Hyprland/v0.56.2";
+
     # home-manager : gère ton home (dotfiles, programmes utilisateur)
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -12,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, hyprland, ... }@inputs: {
     # "nixos" = ton hostname : nixos-rebuild choisit cette config automatiquement
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
