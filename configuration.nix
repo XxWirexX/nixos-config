@@ -120,6 +120,11 @@ in
   };
   services.displayManager.sddm.wayland.enable = true;
   security.pam.services.hyprlock = { }; # pour que hyprlock accepte ton mot de passe
+
+  # ===== KDE Connect =====
+  # Installe KDE Connect (version Plasma 6) et ouvre les ports 1714-1764 TCP/UDP
+  # dans le pare-feu. Le démon se lance via l'autostart XDG (Plasma, et Hyprland via UWSM).
+  programs.kdeconnect.enable = true;
   services.udisks2.enable = true; # nécessaire pour udiskie (déjà activé par Plasma, mais explicite)
 
   # ===== Trousseau (KWallet) =====
