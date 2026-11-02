@@ -47,6 +47,20 @@
   };
   programs.bash.enable = true;
 
+  # Firefox comme navigateur par défaut (liens, xdg-open, fichiers HTML)
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/about" = "firefox.desktop";
+      "x-scheme-handler/unknown" = "firefox.desktop";
+    };
+  };
+  home.sessionVariables.BROWSER = "firefox";
+
   # Laisse home-manager se gérer lui-même
   programs.home-manager.enable = true;
 }
