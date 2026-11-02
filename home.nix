@@ -20,6 +20,7 @@
     codex         # Codex (OpenAI) ; son widget d'usage aussi
     google-chrome
     obsidian      # notes en Markdown (unfree, OK grâce à allowUnfree)
+    jetbrains.idea
   ];
 
   # Git géré par home-manager (génère ~/.config/git/config)
