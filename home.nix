@@ -21,6 +21,7 @@
     google-chrome
     obsidian      # notes en Markdown (unfree, OK grâce à allowUnfree)
     jetbrains.idea
+    nodejs
   ];
 
   # Git géré par home-manager (génère ~/.config/git/config)
