@@ -125,6 +125,14 @@ in
   # Installe KDE Connect (version Plasma 6) et ouvre les ports 1714-1764 TCP/UDP
   # dans le pare-feu. Le démon se lance via l'autostart XDG (Plasma, et Hyprland via UWSM).
   programs.kdeconnect.enable = true;
+
+  # ===== Docker =====
+  # Démon Docker + docker compose (plugin inclus). Démarré à la demande via le socket.
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false; # se lance au premier appel à docker, pas au boot
+    autoPrune.enable = true; # nettoie images/conteneurs inutilisés chaque semaine
+  };
   services.udisks2.enable = true; # nécessaire pour udiskie (déjà activé par Plasma, mais explicite)
 
   # ===== Trousseau (KWallet) =====
@@ -172,7 +180,7 @@ in
   users.users."wire" = {
     isNormalUser = true;
     description = "Wire";
-    extraGroups = [ "networkmanager" "wheel" "i2c" ]; # i2c : luminosité des écrans externes
+    extraGroups = [ "networkmanager" "wheel" "i2c" "docker" ]; # i2c : luminosité des écrans externes, docker : docker sans sudo
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
