@@ -35,6 +35,13 @@
     };
   };
 
+  # direnv : active automatiquement le devShell d'un projet (flake.nix + .envrc) au `cd`
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+    enableZshIntegration = true;
+  };
+
   # GitHub CLI + utilisation de gh comme gestionnaire d'identifiants pour Git
   programs.gh = {
     enable = true;

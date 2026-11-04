@@ -265,7 +265,10 @@ in
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     powerManagement.enable = false;
-    powerManagement.finegrained = true; # éteint la NVIDIA quand elle ne sert pas
+    # finegrained désactivé : un écran externe est branché sur la sortie
+    # HDMI du GPU NVIDIA, donc il doit rester allumé en permanence (sinon
+    # le runtime suspend/resume casse l'atomic modeset en boucle).
+    powerManagement.finegrained = false;
 
     prime = {
       offload = {
