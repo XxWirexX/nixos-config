@@ -32,6 +32,10 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    # An Anime Game Launcher (Genshin Impact). Pas de "follows" sur nixpkgs :
+    # le flake suit nixos-unstable, et sans follows on profite de son cache binaire.
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+
     # home-manager : gère ton home (dotfiles, programmes utilisateur)
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -46,6 +50,7 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
+        ./gaming.nix
 
         home-manager.nixosModules.home-manager
         {
